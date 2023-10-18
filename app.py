@@ -150,21 +150,21 @@ with Implementasi:
             lda_model = LatentDirichletAllocation(n_components=topik, doc_topic_prior=0.2, topic_word_prior=0.1, random_state=42, max_iter=1)
             lda_top = lda_model.fit_transform(user_tf)
             st.write("Model LDA telah dilatih.")
-           
+            data_with_lda = pd.concat([pd.DataFrame(lda_top, columns=[f"Topik {i+1}" for i in range(topik)]), data['Label']], axis=1)
             # Terapkan K-Means clustering pada hasil LDA
             num_clusters = 5  # Ganti dengan jumlah kelompok yang diinginkan
-            kmeans = KMeans(n_clusters=num_clusters, random_state=42)
-            kmeans.fit(lda_top)
+            kmeans = KMeans(n_clusters=num_clusters, random_state=42, init=10)  # Ganti init=10
+            kmeans.fit(data_with_lda.drop("Label", axis=1))  # Hanya menggunakan kolom hasil LDA
             cluster_label = kmeans.labels_
             cluster_centers = kmeans.cluster_centers_
-
-            # Menampilkan informasi kluster
             st.write("Hasil K-Means Clustering:")
             st.write("Label Kluster Pengguna: ", cluster_label[0])
             st.write("Lokasi Kluster Pengguna: ", cluster_centers[cluster_label[0]])
 
-        # Tampilkan prediksi label berdasarkan model Naive Bayes
+        # Transform abstrak pengguna dengan model LDA
+        user_topic_distribution = lda_model.transform(user_tf)
+        st.write(user_topic_distribution)
         y_pred = model2.predict(user_topic_distribution)
-        st.write("Prediksi Label (Naive Bayes): ", y_pred)
+        st.write("Hasil Prediksi: ", y_pred[0])
 
 
