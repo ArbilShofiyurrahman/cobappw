@@ -153,8 +153,9 @@ with Implementasi:
             data_with_lda = pd.concat([pd.DataFrame(lda_top, columns=[f"Topik {i+1}" for i in range(topik)]), data['Label']], axis=1)
             # Terapkan K-Means clustering pada hasil LDA
             num_clusters = 5  # Ganti dengan jumlah kelompok yang diinginkan
-            kmeans = KMeans(n_clusters=num_clusters, random_state=42, init=10)  # Ganti init=10
+            kmeans = KMeans(n_clusters=num_clusters, random_state=42, init='k-means++')  # Gunakan 'k-means++' untuk inisialisasi pusat kluster
             kmeans.fit(data_with_lda.drop("Label", axis=1))  # Hanya menggunakan kolom hasil LDA
+
             cluster_label = kmeans.labels_
             cluster_centers = kmeans.cluster_centers_
             st.write("Hasil K-Means Clustering:")
