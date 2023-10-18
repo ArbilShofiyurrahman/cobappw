@@ -152,10 +152,13 @@ with Implementasi:
             st.write("Model LDA telah dilatih.")
            
             # Terapkan K-Means clustering pada hasil LDA
+            # Terapkan K-Means clustering pada hasil LDA
             num_clusters = 5  # Ganti dengan jumlah kelompok yang diinginkan
             kmeans = KMeans(n_clusters=num_clusters, random_state=42)
             kmeans.fit(lda_top)
             cluster_label = kmeans.labels_
+            cluster_centers = kmeans.cluster_centers_
+
 
             # Menampilkan informasi kluster
             cluster_centers = kmeans.cluster_centers_
