@@ -152,23 +152,19 @@ with Implementasi:
             st.write("Model LDA telah dilatih.")
            
             # Terapkan K-Means clustering pada hasil LDA
-            # Terapkan K-Means clustering pada hasil LDA
             num_clusters = 5  # Ganti dengan jumlah kelompok yang diinginkan
             kmeans = KMeans(n_clusters=num_clusters, random_state=42)
             kmeans.fit(lda_top)
             cluster_label = kmeans.labels_
             cluster_centers = kmeans.cluster_centers_
 
-
             # Menampilkan informasi kluster
-            cluster_centers = kmeans.cluster_centers_
             st.write("Hasil K-Means Clustering:")
             st.write("Label Kluster Pengguna: ", cluster_label[0])
             st.write("Lokasi Kluster Pengguna: ", cluster_centers[cluster_label[0]])
 
-        # Transform abstrak pengguna dengan model LDA
-        user_topic_distribution = lda_model.transform(user_tf)
-        st.write(user_topic_distribution)
+        # Tampilkan prediksi label berdasarkan model Naive Bayes
         y_pred = model2.predict(user_topic_distribution)
-        y_pred
+        st.write("Prediksi Label (Naive Bayes): ", y_pred)
+
 
