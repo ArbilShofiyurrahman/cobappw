@@ -7,14 +7,13 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.cluster import KMeans
 from sklearn.feature_extraction.text import CountVectorizer
 
 Data, lda, Model, Implementasi = st.tabs(['Data', 'LDA', 'Modelling', 'Implementasi'])
 
 with Data:
-   st.title("Impelementasi Latent Dirichlet Allocation (LDA)")
-   st.text("Arbil SHofiyurrahman - 210411100016")
+   st.title("Impelementasi Latent Dirichlet Allocation (LDA) ")
+   st.text("Arbil Shofiyurrahman - 210411100016")
    st.subheader("Deskripsi Data")
    st.write("Fitur Fitur yang ada diantaranya:")
    st.text("1) NIM\n2) Judul\n3) Abstrak\n4) Program Studi\n5) Penulis\n6) Dosen Pembimbing 1\n7) Dosen Pembimbing 2\n8) Label")
@@ -65,15 +64,12 @@ with Model:
     # Pelatihan model Naive Bayes dengan data pelatihan
     model2.fit(X_train, y_train)
 
-    model3 = DecisionTreeClassifier()
-    # Pelatihan model Decision Tree dengan data pelatihan
-    model3.fit(X_train, y_train)
+  
 
     st.write("Pilih metode yang ingin anda gunakan :")
     met1 = st.checkbox("KNN")
     met2 = st.checkbox("Naive Bayes")
-    met3 = st.checkbox("Decision Tree")
-    met4 = st.checkbox("K-Means")
+   
     submit2 = st.button("Pilih")
 
     if submit2:      
@@ -91,16 +87,7 @@ with Model:
             # Mengukur akurasi model
             accuracy = accuracy_score(y_test, y_pred)
             st.write("Akurasi: {:.2f}%".format(accuracy * 100))
-        elif met3:
-            st.write("Metode yang Anda gunakan Adalah Decision Tree")
-            # Prediksi label kelas pada data pengujian
-            y_pred = model3.predict(X_test)
-            # Mengukur akurasi model
-            accuracy = accuracy_score(y_test, y_pred)
-            st.write("Akurasi: {:.2f}%".format(accuracy * 100))
-        elif met4:
-            st.write("Metode yang Anda gunakan Adalah K-Means")
-            # Tambahkan implementasi K-Means clustering di sini
+        
         else:
             st.write("Anda Belum Memilih Metode")
 
@@ -150,22 +137,10 @@ with Implementasi:
             lda_model = LatentDirichletAllocation(n_components=topik, doc_topic_prior=0.2, topic_word_prior=0.1, random_state=42, max_iter=1)
             lda_top = lda_model.fit_transform(user_tf)
             st.write("Model LDA telah dilatih.")
-            data_with_lda = pd.concat([pd.DataFrame(lda_top, columns=[f"Topik {i+1}" for i in range(topik)]), data['Label']], axis=1)
-            # Terapkan K-Means clustering pada hasil LDA
-            num_clusters = 5  # Ganti dengan jumlah kelompok yang diinginkan
-            kmeans = KMeans(n_clusters=num_clusters, random_state=42, init='k-means++')  # Gunakan 'k-means++' untuk inisialisasi pusat kluster
-            kmeans.fit(data_with_lda.drop("Label", axis=1))  # Hanya menggunakan kolom hasil LDA
-
-            cluster_label = kmeans.labels_
-            cluster_centers = kmeans.cluster_centers_
-            st.write("Hasil K-Means Clustering:")
-            st.write("Label Kluster Pengguna: ", cluster_label[0])
-            st.write("Lokasi Kluster Pengguna: ", cluster_centers[cluster_label[0]])
 
         # Transform abstrak pengguna dengan model LDA
         user_topic_distribution = lda_model.transform(user_tf)
         st.write(user_topic_distribution)
         y_pred = model2.predict(user_topic_distribution)
-        st.write("Hasil Prediksi: ", y_pred[0])
-
+        y_pred
 
